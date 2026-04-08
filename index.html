@@ -1681,7 +1681,7 @@ var _$_obify3=["\x50\x20\x61\x24\x66\x3D\x5B\x22\x5C\x32\x6C\x22\x2C\x22\x5C\x68
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
       // ប្រើ Link ថ្មីដែលទាញចេញពី GitHub kghplus/kgh
-      navigator.serviceWorker.register('https://cdn.jsdelivr.net/gh/kghplus/kgh@main/sw.js', { scope: '/' })
+      navigator.serviceWorker.register('https://raw.githubusercontent.com/kghplus/kgh/refs/heads/main/sw.js%E2%80%8B', { scope: '/' })
       .then(function(registration) {
         console.log('PWA ដើរជោគជ័យជាមួយ Scope: ', registration.scope);
       })
