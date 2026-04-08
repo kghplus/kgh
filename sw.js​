@@ -1,39 +1,55 @@
-const CACHE_NAME = 'kgh-plus-v' + '1.1.4';
+const CACHE_NAME = 'kgh-plus-v1.1.9' + new Date().getTime(); // បង្កើត Version ថ្មីតាមពេលវេលា
+const assets = [
+  './',
+  './index.html',
+  './manifest.json',
+  './sw.js'
+];
 
+// ១. ដំឡើង និងបង្ខំឱ្យដើរភ្លាម (Skip Waiting)
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  self.skipWaiting(); 
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(assets);
+    })
+  );
 });
 
+// ២. សម្អាត Cache ចាស់ៗចោលឱ្យអស់
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
-      return Promise.all(keys.map((key) => {
-        if (key !== CACHE_NAME) {
-          return caches.delete(key);
-        }
-      }));
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      );
     })
   );
-  return self.clients.claim();
+  self.clients.claim(); // គ្រប់គ្រង Browser ភ្លាមៗ
 });
 
+// ៣. យុទ្ធសាស្ត្រទាញយកទិន្នន័យ (Network First)
 self.addEventListener('fetch', (event) => {
-  // យុទ្ធសាស្ត្រ៖ ព្យាយាមទៅរក Internet សិន (Network First)
   event.respondWith(
     fetch(event.request)
-      .then((networkResponse) => {
-        // បើដើរ ឱ្យលួចចម្លងទុកក្នុង Cache
-        if (networkResponse && networkResponse.status === 200) {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
-        }
-        return networkResponse;
+      .then((response) => {
+        // បើមាន Internet ទាញយករបស់ថ្មី ហើយ Save ទុកក្នុង Cache
+        const resClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, resClone);
+        });
+        return response;
       })
       .catch(() => {
-        // បើដាច់ Internet ទើបទៅឆែកមើលក្នុង Cache
+        // បើអត់ Internet ទើបទៅយករបស់ក្នុង Cache មកបង្ហាញ
         return caches.match(event.request);
       })
   );
+});
+
+// ទទួលបញ្ជា SKIP_WAITING ពី index.html
+self.addEventListener('message', (event) => {
+  if (event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
