@@ -1,6 +1,6 @@
 {
-  "name": "KGH",
-  "short_name": "KGH",
+  "name": "KGH-Topup",
+  "short_name": "KGH-Topup",
   "version": "1.1.1",
   "start_url": "https://kghplus.github.io/kgh/",
   "display": "standalone",
