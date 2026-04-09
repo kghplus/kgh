@@ -1,9 +1,9 @@
 const CACHE_NAME = 'kgh-plus-v1.1.1'
 const assets = [
   './',
-  './index.html',
-  './manifest.json',
-  './sw.js'
+  'https://kghplus.github.io/kgh',
+  'https://cdn.jsdelivr.net/gh/kghplus/kgh/manifest.json',
+  'https://cdn.jsdelivr.net/gh/kghplus/kgh/sw.js'
 ];
 
 // ១. ដំឡើង និងបង្ខំឱ្យដើរភ្លាម (Skip Waiting)
