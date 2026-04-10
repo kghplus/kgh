@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kgh-plus-v1.1.1'
+const CACHE_NAME = 'kgh-plus-v1.1.2'
 const assets = [
   './',
   'https://kghplus.github.io/kgh',
